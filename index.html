@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	
+<head>
+  <meta charset="utf-8">
+  <title>Check your emotions!</title>
+  <link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body>
+	<script src="./js/get_stream_video.js"></script>
+    <script src="./js/utils.js"></script>
+	<script src="./js/clmtrackr.js"></script>
+	<script src="./js/face_model.js"></script>
+	<script src="./js/emotion_detector.js"></script>
+	<script src="./js/emotion_model.js"></script>
+	
+	<div id="content">
+		<h2 align="center">Say cheese!!!</h2>
+		<div id="container">
+			<video id="video" width="400" height="300" preload="auto" loop></video>
+			<canvas id="overlay" width="400" height="300"></canvas>
+		</div>
+	
+		<canvas id="sketch" width="400" height="300"></canvas>
+		
+		<div id="emotion_container">
+			<div id="emotion_icons">
+				<img class="emotion_icon" id="icon1" src="./images/angry.png">
+				<img class="emotion_icon" id="icon2" src="./images/sad.png">
+				<img class="emotion_icon" id="icon3" src="./images/surprise.png">
+				<img class="emotion_icon" id="icon4" src="./images/fun.png">
+				<img class="emotion_icon" id="icon5" src="./images/neutral.png">
+			</div>
+		</div>
+		
+		<div id="emotion_container">
+				<span class="emotion_name">Angry</span>
+				<span class="emotion_name">Sad</span>
+				<span class="emotion_name">Surprise</span>
+				<span class="emotion_name">Fun</span>
+				<span class="emotion_name">Neutral</span>
+		</div>
+		
+		<div id="controls">
+			<input class="btn" type="button" value="Hide mask" onclick="deleteMask()" id="mask_button"></input>
+		</div>
+			
+		<div id="errorMsg"></div>
+	
+		<script>
+			var vid = document.getElementById('video');
+			var overlay = document.getElementById('overlay');
+			var overlayCC = overlay.getContext('2d');
+			var mask = 1, maskbtn = document.getElementById('mask_button');
+			
+			function deleteMask() {
+				if(mask === 1){
+					mask = 0;
+					maskbtn.value = "Show mask";
+				} else {
+					mask = 1;
+					maskbtn.value = "Hide mask";
+				}
+			}
+				
+			/********** check and set up video/webcam **********/
+	
+			getStreamVideoFromWebCam();
+	
+			/*********** setup of emotion detection *************/
+
+			var ctrack = new clm.tracker({useWebGL : true});
+			ctrack.init(pModel);
+			ctrack.start(vid);
+			
+			var ec = new emotionDetector();
+			ec.init(emotionModel);
+			var emotionData = ec.getBlank();
+			
+			// start loop to draw face
+			drawLoop();
+
+			function drawLoop() {
+				requestAnimFrame(drawLoop);
+				overlayCC.clearRect(0, 0, 400, 300);
+				
+				//psrElement.innerHTML = "score :" + ctrack.getScore().toFixed(4);
+				if (ctrack.getCurrentPosition() && mask === 1) {
+					ctrack.draw(overlay);
+				}
+				
+				var cp = ctrack.getCurrentParameters();	
+				var er = ec.meanPredict(cp);
+				
+				if (er) {
+					updateData(er);
+					for (var i = 0;i < er.length;i++) {
+						if (er[i].value > 0.4) {
+							document.getElementById('icon'+(i+1)).style.visibility = 'visible';
+						} else {
+							document.getElementById('icon'+(i+1)).style.visibility = 'hidden';
+						  }
+					}
+				}
+			}
+				
+			/************ detect emotions *****************/
+			
+			function updateData(data) {
+					// update
+					/*var rects = svg.selectAll("rect")
+						.data(data)
+						.attr("y", function(datum) { return height - y(datum.value); })
+						.attr("height", function(datum) { return y(datum.value); });
+					var texts = svg.selectAll("text.labels")
+						.data(data)
+						.attr("y", function(datum) { return height - y(datum.value); })
+						.text(function(datum) { return datum.value.toFixed(1);});
+
+					// enter 
+					rects.enter().append("svg:rect");
+					texts.enter().append("svg:text");
+
+					// exit
+					rects.exit().remove();
+					texts.exit().remove();*/
+				}
+				
+			
+		</script>
+	</div>
+</body>
+</html>

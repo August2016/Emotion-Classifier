@@ -1,0 +1,97 @@
+body {
+	background-color: #f9f0f0;
+	margin: 0px auto;
+	max-width: 1150px;
+}
+			
+#overlay {
+	top: 50px;
+	left: 0px;
+	-o-transform : scaleX(-1);
+	-webkit-transform : scaleX(-1);
+	transform : scaleX(-1);
+	-ms-filter : fliph;
+	filter : fliph;
+
+	width : 400px;
+	height : 300px;
+}
+
+#video {
+	position: absolute;
+	-o-transform : scaleX(-1);
+	-webkit-transform : scaleX(-1);
+	transform : scaleX(-1);
+	-ms-filter : fliph;
+	filter : fliph; 
+
+	width : 400px;
+	height : 300px;
+}
+			
+#container {
+	position : relative;
+	max-width: 400px;
+	margin-top : 50px;
+	margin-left : auto;
+	margin-right : auto;
+}
+			
+#content {
+	margin-top : 50px;
+	margin-left : auto;
+	margin-right : auto;
+	max-width: 400px;
+}
+			
+#sketch, #filter {
+	display: none;
+}
+			
+h2 {
+	font-weight : 400;
+}
+			
+.btn {
+	font-family: 'Lato';
+	font-size: 16px;
+}
+
+#controls {
+	margin: 40px auto;
+	text-align : center;
+}
+
+#emotion_container {
+	margin: 10px auto;
+	width: 400px;
+}
+
+#emotion_icons{
+	margin: 0 auto;
+	height: 50px;
+	max-width: 400px;
+}
+
+.emotion_icon {
+	width : 40px;
+	height : 40px;
+	margin-top: 5px;
+	/*margin-left : 13px;*/
+	margin-left : 30px;
+}
+
+.emotion_name {
+	width : 40px;
+	margin-top: 10px;
+	margin-left : 33px;
+}
+
+#icon1, #icon2, #icon3, #icon4, #icon5, #icon6 {
+	visibility : hidden;
+}
+
+div#errorMsg p {
+  	color: #F00;
+}
+
